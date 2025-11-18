@@ -1,0 +1,155 @@
+import java.awt.Choice;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.util.Date;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+public class patient_discharge extends JFrame {
+
+    patient_discharge(){
+
+
+        JPanel panel = new JPanel();
+        panel.setBounds(5,5,790,390);
+        panel.setBackground(new Color(90,156,163));
+        panel.setLayout(null);
+        add(panel);
+
+        JLabel cko = new JLabel("Check-Out");
+        cko.setBounds(100,20,150,20);
+        cko.setFont(new Font("tahoma",Font.BOLD,20));
+        cko.setForeground(Color.white);
+        panel.add(cko);
+
+        JLabel id = new JLabel("Customer-Id");
+        id.setBounds(30,80,150,20);
+        id.setFont(new Font("tahoma",Font.BOLD,14));
+        id.setForeground(Color.white);
+        panel.add(id);
+
+        Choice choice = new Choice();
+        try {
+            Conn cp = new Conn();
+            ResultSet result = cp.stm.executeQuery("select *from paitent_info");
+            while(result.next()){
+                choice.add(result.getString("Number"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        choice.setBounds(200,80,150,20);
+        panel.add(choice);
+
+        JLabel rno = new JLabel("Room Number");
+        rno.setBounds(30,130,150,20);
+        rno.setFont(new Font("tahoma",Font.BOLD,14));
+        rno.setForeground(Color.white);
+        panel.add(rno);
+
+        JLabel rno1 = new JLabel("");
+        rno1.setBounds(200,130,150,20);
+        rno1.setFont(new Font("tahoma",Font.BOLD,14));
+        rno1.setForeground(Color.white);
+        panel.add(rno1);
+
+        JLabel time = new JLabel("In Time");
+        time.setBounds(30,180,150,20);
+        time.setFont(new Font("tahoma",Font.BOLD,14));
+        time.setForeground(Color.white);
+        panel.add(time);
+
+        JLabel time1 = new JLabel("");
+        time1.setBounds(200,180,150,20);
+        time1.setFont(new Font("tahoma",Font.BOLD,14));
+        time1.setForeground(Color.white);
+        panel.add(time1);
+
+        JLabel ot = new JLabel("Out Time");
+        ot.setBounds(30,230,150,20);
+        ot.setFont(new Font("tahoma",Font.BOLD,14));
+        ot.setForeground(Color.white);
+        panel.add(ot);
+
+        Date date = new Date();
+
+        JLabel ot1 = new JLabel(""+date);
+        ot1.setBounds(200,230,250,20);
+        ot1.setFont(new Font("tahoma",Font.BOLD,14));
+        ot1.setForeground(Color.white);
+        panel.add(ot1);
+
+        JButton discharge = new JButton("Discharge");
+        discharge.setBounds(30,300,120,30);
+        discharge.setForeground(Color.white);
+        discharge.setBackground(Color.black);
+        panel.add(discharge);
+        discharge.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e){
+
+                try {
+                    Conn p = new Conn();
+                    p.stm.executeUpdate("delete from paitent_info where Number = '"+choice.getSelectedItem()+"'");
+                    p.stm.executeUpdate("Update Room set Availability = 'Available' where Room_number = '"+rno1.getText()+"'");
+                    JOptionPane.showMessageDialog(null,"Done");
+                    dispose();
+                    
+                } catch(Exception E) {
+                    E.printStackTrace();
+                }
+
+            }
+        });
+
+        JButton Check = new JButton("Check");
+        Check.setBounds(170,300,120,30);
+        Check.setForeground(Color.white);
+        Check.setBackground(Color.BLACK);
+        panel.add(Check);
+        Check.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e){
+            
+                try {
+                    
+                      Conn sk = new Conn();
+                String q = "select *from  paitent_info where Number = '"+choice.getSelectedItem()+"' ";
+                ResultSet result = sk.stm.executeQuery(q);
+                while(result.next()){
+                    rno1.setText(result.getString("Room_Number"));
+                    time1.setText(result.getString("Time"));
+
+                }
+                } catch (Exception E) {
+                    E.printStackTrace();
+                }
+            }
+        });
+
+        JButton back = new JButton("Back");
+        back.setBounds(300,300,120,30);
+        back.setForeground(Color.white);
+        back.setBackground(Color.BLACK);
+        panel.add(back);
+        back.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                dispose();
+            }
+        });
+
+
+        setUndecorated(true);
+        setSize(800,400);
+        setLocation(400,250);
+        setLayout(null);
+        setVisible(true);
+    }
+  
+}
