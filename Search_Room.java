@@ -63,6 +63,9 @@ public class Search_Room extends JFrame {
         roomn.setFont(new Font("Tahoma",Font.BOLD,14));
         panel.add(roomn);
 
+
+
+        
         JLabel availabel= new JLabel("Availability");
         availabel.setBounds(175,162,150,20);
         availabel.setForeground(Color.white);
